@@ -11,7 +11,7 @@ beanstalkd还提供了`binlog`机制，当重启beanstalkd，当前任务的状�
 
 ### 2.1 核心概念
 
-[beanstalkd-architecture](https://github.com/dendi875/images/blob/master/Queue/beanstalkd-architecture.png)
+![beanstalkd-architecture](https://github.com/dendi875/images/blob/master/Queue/beanstalkd-architecture.png)
 
 `Beanstalkd` 使用 `Producer-Consumer`设计模式，无论是其协议结构还是使用方式都是类似`Memcached`风格的。以下是`Beanstalkd`设计思想中核心概念：
 
@@ -35,7 +35,7 @@ beanstalkd还提供了`binlog`机制，当重启beanstalkd，当前任务的状�
 
 `Beanstalkd`中的任务（`job`）替代了消息（`message`）的概念，任务会有一系列状态。任务的生命周期如下：
 
-[beanstalkd-job-status](https://github.com/dendi875/images/blob/master/Queue/beanstalkd-job-status.png)
+![beanstalkd-job-status](https://github.com/dendi875/images/blob/master/Queue/beanstalkd-job-status.png)
 
 一个 `Beanstalkd`任务可能会包含以下状态：
 
@@ -43,10 +43,10 @@ beanstalkd还提供了`binlog`机制，当重启beanstalkd，当前任务的状�
 - **RESERVED** - 已经被消费者获取，正在执行的任务。当`consumer`获取了当前`READY`的任务后，该任务的状态就会迁移到`RESERVED`状态，这时其它的`consumer`就不能再操作该任务。`Beanstalkd`会检查任务是否在`TTR`（`time-to-run`）内完成
 - **DELETED** - 消息被删除，`Beanstalkd`不再维持这些消息。即任务生命周期结束
 - **DELAYED** - 延迟执行的任务。当任务被延时`put`时，任务就处理`DELAYED`状态。等待时间过后，任务会被迁移到`READY`状态。当消费者处理任务后，可以将任务再次放回`DELAYED`队列延迟执行
-- **BURIED** - 埋藏的任务，这时任务不会被执行，也不会消失。当`consumer`完成该任务后，可以选择`delete`或`release`或`bury`操作
+- **BURIED** - 埋葬的任务，这时任务不会被执行，也不会消失。当`consumer`完成该任务后，可以选择`delete`或`release`或`bury`操作
     * `delete`后，任务被删除，生命周期结束
     * `release`操作可以把任务状态迁移回`READY`状态或`DELAYED`状态，使其它`consumer`可以继续获取和执行该任务
-    * `bury`操作会埋藏任务，等需要该任务时，再将埋藏的任务`kick`回`READY`，也可以通过`delete`删除`BURIED`状态的任务
+    * `bury`操作会埋葬任务，等需要该任务时，再将埋葬的任务`kick`回`READY`，也可以通过`delete`删除`BURIED`状态的任务
 
 ### 2.3 Beanstalkd特点
 
@@ -367,7 +367,7 @@ OK 23
 
 * `reserve`或`reserve-with-timeout`前先要`watch xxxtube`，可以同时监控多个`tube`，这样可以同时取几个队列的任务。但是，千万要小心，如果在一个进程中，不小心`watch`到了多个`tube`，那么有时候会取错任务，一般取`job`的步骤为：`useTube xxxtube -> watch xxxtube -> ignore default -> reserve`
 
-* `job`处理完成，应该`delete`删除掉，或者`release`再放回队列，或者`bury`把它埋藏掉，这个取决于你的设计
+* `job`处理完成，应该`delete`删除掉，或者`release`再放回队列，或者`bury`把它埋葬掉，这个取决于你的设计
 
 ## 6. Beanstalkd 不足
 
