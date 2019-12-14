@@ -867,9 +867,10 @@ root     32053  0.0  0.0   5976   756 pts/1    S+   18:29   0:00 grep --color=au
 
 ## 4. 进程的守护神daemontools和supervisor
 
+daemontools：https://github.com/dendi875/Linux/blob/master/daemontools.md
+
 ## 5. 参考资料
 
 - [APUE](https://book.douban.com/subject/1788421/)
 - [PHP：POSIX](https://www.php.net/manual/zh/book.posix.php)
 - [PHP：PCNTL](https://www.php.net/manual/zh/book.pcntl.php)
-- [daemontools](http://linbo.github.io/2013/02/24/daemontools)
