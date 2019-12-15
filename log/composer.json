@@ -1,5 +1,6 @@
 {
     "require": {
-        "pda/pheanstalk": "^3.2"
+        "pda/pheanstalk": "^3.2",
+        "elasticsearch/elasticsearch": "~5.0"
     }
 }
