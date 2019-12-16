@@ -2,18 +2,18 @@
 /**
  * 消息队列支持类，基于`beanstalkd`实现
  *
- * 注意：一个`Queue`实例只能有一个队列名（queueName），防止取数据的时候混乱
+ * 注意：一个`BeanstalkdQueue`实例只能有一个队列名（queueName），防止取数据的时候混乱
  *
  * @author     <dendi875@163.com>
  * @createDate 2019-12-11 18:13:23
  * @copyright  Copyright (c) 2018 https://github.com/dendi875
  */
 
-require_once('./vendor/autoload.php');
+namespace Walle\Queue;
 
 use Pheanstalk\Pheanstalk;
 
-class Queue
+class BeanstalkdQueue
 {
     private $pheanstalk;
     private $queueName;
@@ -97,8 +97,8 @@ class Queue
     public function putToQueue($queueName, $data, $priority = 2, $delay = 0, $ttr = 60)
     {
         return $this->pheanstalk
-                            ->useTube($queueName)
-                            ->put($data, $priority, $delay, $ttr);
+            ->useTube($queueName)
+            ->put($data, $priority, $delay, $ttr);
     }
 
     /**
@@ -109,10 +109,10 @@ class Queue
         $this->queueName = $queueName;
 
         $job = $this->pheanstalk
-                        ->useTube($queueName)
-                        ->watch($queueName)
-                        ->ignore('default')
-                        ->reserve($timeout);
+            ->useTube($queueName)
+            ->watch($queueName)
+            ->ignore('default')
+            ->reserve($timeout);
 
         if ($job !== false) {
             $this->pheanstalk->delete($job);
