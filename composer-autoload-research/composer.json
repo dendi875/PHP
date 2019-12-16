@@ -1,0 +1,25 @@
+{
+	"name": "dendi/composer",
+	"description": "Composer Autoload Research",
+	"version": "1.0.0-dev",
+	"autoload": {
+		"classmap" : ["component/"],
+		"files": ["helper/functions.php"],
+		"psr-0": {
+			"Linux\\Man\\": "",
+			"": "domain/",
+			"Hello\\Girl\\": ["hello/"]
+		},
+		"psr-4": {
+			"": ["core/", "util/"],
+			"App\\": "",
+			"Lego\\": ["lego/src/"]
+		}
+	},
+	"scripts": {
+		"post-autoload-dump": [
+			"Lego\\Scripts\\ComposerScripts::postAutoloadDump",
+			"php -r \"file_exists('log.txt') || file_put_contents('log.txt', 'success');\""
+		]
+	}
+}

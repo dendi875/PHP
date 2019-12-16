@@ -445,5 +445,6 @@ $results = $client->search($params);
 
 ## 参考资料
 
+- [elasticsearch研究学习](https://github.com/dendi875/Linux/blob/master/elasticsearch%E7%A0%94%E7%A9%B6%E5%AD%A6%E4%B9%A0.md)
 - [官方 Elasticsearch-PHP API 文档](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/index.html)
 - [官方 Elasticsearch-PHP API 中文文档](https://www.elastic.co/guide/cn/elasticsearch/php/current/_quickstart.html)
