@@ -1,5 +1,0 @@
-{
-    "require": {
-        "pda/pheanstalk": "^3.2"
-    }
-}
