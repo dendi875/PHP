@@ -318,31 +318,34 @@ while (1) {
 #!/usr/bin/env php
 <?php
 
+function pr_ids($name)
+{
+    $pid = posix_getpid();
+    printf("%s：pid = %d, ppid = %d, pgid = %d, sid = %d\n",
+        $name, $pid, posix_getppid(), posix_getpgid($pid), posix_getsid($pid));
+}
+
 function run()
 {
-    $pid = pcntl_fork();
-    if ($pid == -1) {
-        //返回值为-1,创建失败
-        die('could not fork');
-    } elseif ($pid) {
-        // 返回值大于0，是父进程
-        echo "I am father process.\n";
-        printf("pid：%d\tppid：%d\n", getmypid(), posix_getppid());
+    $pid = null;
 
-        // 为保证子进程先运行，让父进程睡眠1s
-        sleep(1);
-        echo "father process is exited.\n";
-    } else {
-        // 返回值等于0，是子进程
-        echo "I am child process.\n";
-        printf("pid：%d\tppid：%d\n", getmypid(), posix_getppid());
-        echo "I will sleep 3 seconds", "\n";
-
-        // 子进程睡眠3s，保证父进程先退出，此后子进程成为孤儿进程
-        sleep(3);
-        printf("now pid：%d\tppid：%d\n", getmypid(), posix_getppid());
-        echo "child process is exited.\n";
+    if (($pid = pcntl_fork()) < 0) {
+        die("fork error");
+    } else if ($pid == 0) {     /* 子进程中 */
+        pr_ids("child");
+        sleep(3);   /* 睡眠3s，保证父进程先退出，子进程成为孤儿进程 */
+        pr_ids("now child");
+        exit(0);
     }
+
+    /**
+     * 父进程睡眠1s，保证子进程先运行
+     * 在子进程还没有成为孤儿进程前打印父进程ID和子进程成为孤儿进程后打印的父进程ID做对比
+     */
+    sleep(1);
+    pr_ids("parent");
+    printf("parent process is exited.\n");
+    exit(0);
 }
 
 run();
